@@ -6,21 +6,25 @@ export default class Banking {
   }
 
   depositMoney(amount) {
+    if (amount <= 0) {
+      throw new Error("Le montant doit être supérieur à 0€");
+    }
+
+    if (amount > 1000) {
+      throw new Error("Le montant doit être inférieur à 1000€");
+    }
+
     this.balance += amount;
-    console.log(
-      `Vous avez déposé ${amount}€. Nouveau solde : ${this.balance}€`
-    );
+
     this.saveOperation("deposit", amount);
   }
 
   withdrawMoney(amount) {
     if (this.balance >= amount) {
       this.balance -= amount;
-      console.log(
-        `Vous avez retiré ${amount}€. Nouveau solde : ${this.balance}€`
-      );
+
       this.saveOperation("withdrawal", amount);
-    } else console.log("Solde insuffisant pour effectuer le retrait.");
+    } else throw new Error("Solde insuffisant pour effectuer le retrait.");
   }
 
   calculateInterest() {
