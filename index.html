@@ -6,7 +6,7 @@
     <title>Banque : Compte d’Épargne</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
+  <body class="flex flex-col min-h-screen">
     <header class="bg-white">
       <nav
         class="mx-auto flex max-w-7xl items-center justify-between p-6 border-b border-gray-200 gap-x-12"
@@ -32,7 +32,7 @@
         <div>Solde : <span id="balance" class="font-semibold">0</span> €</div>
       </nav>
     </header>
-    <main class="mx-auto max-w-7xl py-6">
+    <main class="mx-auto max-w-7xl w-full py-6">
       <section id="deposit" class="">
         <h2 class="font-bold text-xl">Dépot</h2>
 
@@ -76,7 +76,6 @@
           </div>
         </form>
       </section>
-      <div class="mt-6 text-red-400 hidden" id="error"></div>
 
       <button
         id="toggle-history"
@@ -110,7 +109,17 @@
           </div>
         </div>
       </section>
+
+      <div
+        id="notification"
+        class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white py-2 px-4 rounded-lg z-50"
+      ></div>
     </main>
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+      <div class="mx-auto max-w-7xl text-center text-sm text-gray-500">
+        <p>&copy; 2021 Banking App. Tous droits réservés.</p>
+      </div>
+    </footer>
     <script type="module" src="script.js"></script>
   </body>
 </html>
