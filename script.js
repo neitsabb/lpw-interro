@@ -6,7 +6,7 @@ const solde = document.querySelector("#balance");
 
 const links = document.querySelectorAll("[data-nav]");
 
-const history = document.querySelector("#history-list");
+const histories = document.querySelector("[data-history]");
 
 links.forEach((link) => {
   link.addEventListener("click", () => {
@@ -55,6 +55,29 @@ forms.forEach((form) => {
           ? `Dépôt de ${operation.amount}€ effectué le ${operation.date}`
           : `Retrait de ${operation.amount}€ effectué le ${operation.date}`;
       history.appendChild(li);
+    });
+
+    customer.banking.operations.map((operation) => {
+      let history =
+        operation.type === "withdrawal"
+          ? document.querySelector("[data-history=withdrawal]")
+          : document.querySelector("[data-history=deposit]");
+
+      const div = document.createElement("div");
+      div.classList.add("flex divide-x w-full [&>*]:w-full");
+
+      const amountSpan = document.createElement("span");
+      amountSpan.classList.add("py-2 px-4 block");
+      amountSpan.textContent = operation.amount;
+
+      const dateSpan = document.createElement("span");
+      dateSpan.classList.add("py-2 px-4 block");
+      dateSpan.textContent = operation.date;
+
+      div.appendChild(amountSpan);
+      div.appendChild(dateSpan);
+
+      history.appendChild(div);
     });
   });
 });
