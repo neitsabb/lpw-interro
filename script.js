@@ -26,53 +26,61 @@ links.forEach((link) => {
 
 const forms = document.querySelectorAll("form");
 
+const classLists = {
+  history: ["flex", "divide-x", "w-full", "[&>*]:w-full"],
+  operation: ["py-2", "px-4", "block"],
+};
+
 forms.forEach((form) => {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+    const input = form.querySelector("input");
 
-    const amount = parseInt(form.querySelector("input").value);
+    if (input.value === "")
+      return displayError("Veuillez renseigner un montant.");
+
+    const amount = parseInt(input.value);
     const action = form.id;
 
-    switch (action) {
-      case "deposit":
-        customer.deposit(amount);
-        break;
-      case "withdrawal":
-        customer.withdraw(amount);
-        break;
-      case "interest":
-        customer.banking.calculateInterest();
-        break;
+    try {
+      switch (action) {
+        case "deposit":
+          customer.deposit(amount);
+          break;
+        case "withdrawal":
+          customer.withdraw(amount);
+          break;
+        case "interest":
+          customer.banking.calculateInterest();
+          break;
+      }
+    } catch (error) {
+      displayError(error.message);
     }
+
+    input.value = "";
 
     solde.textContent = customer.banking.balance;
 
-    history.innerHTML = "";
-    customer.banking.operations.map((operation) => {
-      const li = document.createElement("li");
-      li.textContent =
-        operation.type === "deposit"
-          ? `Dépôt de ${operation.amount}€ effectué le ${operation.date}`
-          : `Retrait de ${operation.amount}€ effectué le ${operation.date}`;
-      history.appendChild(li);
-    });
+    histories.innerHTML = "";
 
     customer.banking.operations.map((operation) => {
       let history =
-        operation.type === "withdrawal"
-          ? document.querySelector("[data-history=withdrawal]")
-          : document.querySelector("[data-history=deposit]");
+        operation.type === "deposit"
+          ? document.querySelector("[data-history=deposit]")
+          : document.querySelector("[data-history=withdrawal]");
 
       const div = document.createElement("div");
-      div.classList.add("flex divide-x w-full [&>*]:w-full");
+      div.classList.add(...classLists.history);
 
       const amountSpan = document.createElement("span");
-      amountSpan.classList.add("py-2 px-4 block");
-      amountSpan.textContent = operation.amount;
+
+      amountSpan.classList.add(...classLists.operation);
+      amountSpan.textContent = `${operation.amount}€`;
 
       const dateSpan = document.createElement("span");
-      dateSpan.classList.add("py-2 px-4 block");
-      dateSpan.textContent = operation.date;
+      dateSpan.classList.add(...classLists.operation);
+      dateSpan.textContent = new Date(operation.date).toLocaleString();
 
       div.appendChild(amountSpan);
       div.appendChild(dateSpan);
@@ -82,6 +90,19 @@ forms.forEach((form) => {
   });
 });
 
+document
+  .querySelector("#toggle-history")
+  .addEventListener("click", () =>
+    document.querySelector("#history").classList.toggle("hidden")
+  );
+
+const displayError = (message) => {
+  console.error(message);
+  const error = document.querySelector("#error");
+  error.textContent = message;
+  error.classList.remove("hidden");
+  setTimeout(() => error.classList.add("hidden"), 3000);
+};
 // // Money deposit
 // customer.deposit(200);
 
