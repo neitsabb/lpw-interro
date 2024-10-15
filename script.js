@@ -1,16 +1,72 @@
-// import Banking from "./Banking.js";
 import Client from "./Client.js";
 
 const customer = new Client("Bastien");
 
-// Money deposit
-customer.deposit(200);
+const solde = document.querySelector("#balance");
 
-// Money withdrawal
-customer.withdraw(150);
+const links = document.querySelectorAll("[data-nav]");
 
-// Interest calculation
-customer.banking.calculateInterest();
+const history = document.querySelector("#history-list");
+
+links.forEach((link) => {
+  link.addEventListener("click", () => {
+    const target = link.getAttribute("data-nav");
+
+    document.querySelectorAll("section").forEach((section) => {
+      if (section.id !== "history") section.classList.add("hidden");
+    });
+
+    document.querySelector(`section#${target}`).classList.remove("hidden");
+
+    document.querySelectorAll("input#amount").forEach((input) => {
+      input.value = "";
+    });
+  });
+});
+
+const forms = document.querySelectorAll("form");
+
+forms.forEach((form) => {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const amount = parseInt(form.querySelector("input").value);
+    const action = form.id;
+
+    switch (action) {
+      case "deposit":
+        customer.deposit(amount);
+        break;
+      case "withdrawal":
+        customer.withdraw(amount);
+        break;
+      case "interest":
+        customer.banking.calculateInterest();
+        break;
+    }
+
+    solde.textContent = customer.banking.balance;
+
+    history.innerHTML = "";
+    customer.banking.operations.map((operation) => {
+      const li = document.createElement("li");
+      li.textContent =
+        operation.type === "deposit"
+          ? `Dépôt de ${operation.amount}€ effectué le ${operation.date}`
+          : `Retrait de ${operation.amount}€ effectué le ${operation.date}`;
+      history.appendChild(li);
+    });
+  });
+});
+
+// // Money deposit
+// customer.deposit(200);
+
+// // Money withdrawal
+// customer.withdraw(150);
+
+// // Interest calculation
+// customer.banking.calculateInterest();
 
 // const banking = new Banking();
 

@@ -4,53 +4,84 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Banque : Compte d’Épargne</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-      }
-
-      header {
-        color: #03469e;
-        text-align: center;
-        padding: 1em;
-      }
-
-      section {
-        padding: 0 16px;
-      }
-      section:first-of-type {
-        border: 2px solid #dcdcdc;
-      }
-
-      p {
-        font-style: italic;
-        margin-inline: auto;
-        display: block;
-      }
-
-      h1 {
-        font-size: 28px;
-      }
-      h2 {
-        font-size: 20px;
-      }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <header>
-      <h1>Mon compte d'&eacute;pargne</h1>
+    <header class="bg-white">
+      <nav
+        class="mx-auto flex max-w-7xl items-center justify-between p-6 border-b border-gray-200 gap-x-12"
+        aria-label="Global"
+      >
+        <div class="flex lg:flex-1">
+          <a href="#" class="">
+            <h1 class="font-bold text-2xl">Banking App</h1>
+          </a>
+        </div>
+        <div class="flex lg:gap-x-12">
+          <a
+            data-nav="deposit"
+            class="text-sm font-semibold leading-6 text-gray-900"
+            >Dépot</a
+          >
+          <a
+            data-nav="withdrawal"
+            class="text-sm font-semibold leading-6 text-gray-900"
+            >Retrait</a
+          >
+        </div>
+        <div>Solde : <span id="balance" class="font-semibold">0</span> €</div>
+      </nav>
     </header>
-    <section>
-      <h2>Gestion de compte</h2>
-      <p>Nous allons simuler des opérations bancaires simples en JavaScript.</p>
-    </section>
-    <section>
-      <h2>Résultats</h2>
-    </section>
+    <main class="mx-auto max-w-7xl py-6">
+      <section id="deposit" class="">
+        <h2 class="font-bold text-xl">Dépot</h2>
 
+        <form id="deposit" class="mt-6">
+          <div class="flex flex-col gap-y-4">
+            <label for="amount" class="text-sm font-semibold">Montant</label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              class="p-2 border border-gray-300 rounded-md"
+              required
+            />
+            <button
+              type="submit"
+              class="bg-blue-500 text-white font-semibold py-2 rounded-md"
+            >
+              Valider
+            </button>
+          </div>
+        </form>
+      </section>
+      <section id="withdrawal" class="hidden">
+        <h2 class="font-bold text-xl">Retrait</h2>
+        <form id="withdrawal" class="mt-6">
+          <div class="flex flex-col gap-y-4">
+            <label for="amount" class="text-sm font-semibold">Montant</label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              class="p-2 border border-gray-300 rounded-md"
+              required
+            />
+            <button
+              type="submit"
+              class="bg-blue-500 text-white font-semibold py-2 rounded-md"
+            >
+              Valider
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="history" class="mt-6 border-t border-gray-200 py-6">
+        <h2 class="font-bold text-xl">Historique</h2>
+        <ul id="history-list" class="mt-4"></ul>
+      </section>
+    </main>
     <script type="module" src="script.js"></script>
   </body>
 </html>
