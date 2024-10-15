@@ -146,6 +146,21 @@ const displayNotification = (message, isError = false) => {
   }, 3000);
 };
 
+const getExchangeRate = async () => {
+  try {
+    const response = await fetch("https://happyapi.fr/api/devises");
+    const {
+      result: {
+        result: { devises },
+      },
+    } = await response.json();
+    console.log(devises);
+  } catch (error) {
+    console.error("Erreur lors de la récupération du taux de change :", error);
+  }
+};
+
+getExchangeRate();
 // // Money deposit
 // customer.deposit(200);
 
