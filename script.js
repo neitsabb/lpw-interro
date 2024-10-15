@@ -8,6 +8,8 @@ const links = document.querySelectorAll("[data-nav]");
 
 const histories = document.querySelector("[data-history]");
 
+let notificationTimeout;
+
 links.forEach((link) => {
   link.addEventListener("click", () => {
     const target = link.getAttribute("data-nav");
@@ -29,6 +31,29 @@ const forms = document.querySelectorAll("form");
 const classLists = {
   history: ["flex", "divide-x", "w-full", "[&>*]:w-full"],
   operation: ["py-2", "px-4", "block"],
+  error: "bg-red-400",
+  success: "bg-green-400",
+};
+
+const formatDate = (date) => {
+  const daysOfWeek = [
+    "Dimanche",
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+  ];
+
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+
+  return `${dayOfWeek} ${day}/${month}/${year} à ${hours}:${minutes}`;
 };
 
 forms.forEach((form) => {
@@ -37,7 +62,7 @@ forms.forEach((form) => {
     const input = form.querySelector("input");
 
     if (input.value === "")
-      return displayError("Veuillez renseigner un montant.");
+      return displayNotification("Veuillez renseigner un montant.", true);
 
     const amount = parseInt(input.value);
     const action = form.id;
@@ -46,16 +71,18 @@ forms.forEach((form) => {
       switch (action) {
         case "deposit":
           customer.deposit(amount);
+          displayNotification("Dépôt effectué avec succès.");
           break;
         case "withdrawal":
           customer.withdraw(amount);
+          displayNotification("Retrait effectué avec succès.");
           break;
         case "interest":
           customer.banking.calculateInterest();
           break;
       }
     } catch (error) {
-      displayError(error.message);
+      displayNotification(error.message, true);
     }
 
     input.value = "";
@@ -80,7 +107,7 @@ forms.forEach((form) => {
 
       const dateSpan = document.createElement("span");
       dateSpan.classList.add(...classLists.operation);
-      dateSpan.textContent = new Date(operation.date).toLocaleString();
+      dateSpan.textContent = formatDate(operation.date);
 
       div.appendChild(amountSpan);
       div.appendChild(dateSpan);
@@ -96,13 +123,29 @@ document
     document.querySelector("#history").classList.toggle("hidden")
   );
 
-const displayError = (message) => {
-  console.error(message);
-  const error = document.querySelector("#error");
-  error.textContent = message;
-  error.classList.remove("hidden");
-  setTimeout(() => error.classList.add("hidden"), 3000);
+const displayNotification = (message, isError = false) => {
+  const notification = document.querySelector("#notification");
+
+  if (notificationTimeout) {
+    clearTimeout(notificationTimeout);
+  }
+
+  if (isError) {
+    notification.classList.remove(classLists.success);
+    notification.classList.add(classLists.error);
+  } else {
+    notification.classList.remove(classLists.error);
+    notification.classList.add(classLists.success);
+  }
+
+  notification.textContent = message;
+  notification.classList.remove("hidden");
+
+  notificationTimeout = setTimeout(() => {
+    notification.classList.add("hidden");
+  }, 3000);
 };
+
 // // Money deposit
 // customer.deposit(200);
 
