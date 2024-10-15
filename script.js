@@ -1,18 +1,30 @@
-import Banking from "./Banking.js";
+// import Banking from "./Banking.js";
+import Client from "./Client.js";
 
-const banking = new Banking();
+const customer = new Client("Bastien");
 
 // Money deposit
-banking.depositMoney(200);
+customer.deposit(200);
 
 // Money withdrawal
-banking.withdrawMoney(150);
+customer.withdraw(150);
 
 // Interest calculation
-banking.calculateInterest();
+customer.banking.calculateInterest();
 
-// Display history
-banking.displayHistory();
+// const banking = new Banking();
+
+// // Money deposit
+// banking.depositMoney(200);
+
+// // Money withdrawal
+// banking.withdrawMoney(150);
+
+// // Interest calculation
+// banking.calculateInterest();
+
+// // Display history
+// banking.displayHistory();
 
 // const interestRates = 0.03;
 // let balance = 1000;
